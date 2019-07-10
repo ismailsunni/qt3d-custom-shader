@@ -18,6 +18,22 @@ BillboardMaterial::BillboardMaterial()
     addParameter( mSize );
     addParameter( mWindowSize );
 
+    // Texture Image
+    Qt3DRender::QTextureImage *image = new Qt3DRender::QTextureImage;
+    image->setSource(QUrl( QStringLiteral( "qrc:/shaders/success-kid.png" ) ));
+
+    // Texture2D
+    Qt3DRender::QTexture2D *texture2D = new Qt3DRender::QTexture2D;
+    texture2D->setGenerateMipMaps(false);
+    texture2D->setMagnificationFilter(Qt3DRender::QTexture2D::Linear);
+    texture2D->setMinificationFilter(Qt3DRender::QTexture2D::Linear);
+
+    texture2D->addTextureImage(image);
+
+    mTxt = new Qt3DRender::QParameter( "tex0", texture2D, this );
+
+    addParameter(mTxt);
+
     // Shader program
     Qt3DRender::QShaderProgram *shaderProgram = new Qt3DRender::QShaderProgram( this );
     shaderProgram->setVertexShaderCode( Qt3DRender::QShaderProgram::loadSource( QUrl( QStringLiteral( "qrc:/shaders/billboards.vert" ) ) ) );
@@ -45,22 +61,6 @@ BillboardMaterial::BillboardMaterial()
     // Effect
     Qt3DRender::QEffect *effect = new Qt3DRender::QEffect( this );
     effect->addTechnique(technique);
-
-    // Texture Image
-    Qt3DRender::QTextureImage *image = new Qt3DRender::QTextureImage;
-    image->setSource(QUrl( QStringLiteral( "qrc:/shaders/success-kid.png" ) ));
-
-    // Texture2D
-    Qt3DRender::QTexture2D *texture2D = new Qt3DRender::QTexture2D;
-    texture2D->setGenerateMipMaps(false);
-    texture2D->setMagnificationFilter(Qt3DRender::QTexture2D::Linear);
-    texture2D->setMinificationFilter(Qt3DRender::QTexture2D::Linear);
-
-    texture2D->addTextureImage(image);
-
-    mTxt = new Qt3DRender::QParameter( "tex0", texture2D, this );
-
-    addParameter(mTxt);
 
     setEffect( effect );
 }

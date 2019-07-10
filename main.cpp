@@ -14,6 +14,8 @@
 #include <Qt3DExtras/QForwardRenderer>
 #include <Qt3DExtras/QOrbitCameraController>
 #include <Qt3DExtras/QPhongAlphaMaterial>
+#include <Qt3DExtras/QPlaneMesh>
+
 #include <Qt3DExtras/Qt3DWindow>
 #include <Qt3DExtras/qorbitcameracontroller.h>
 
@@ -21,6 +23,7 @@
 #include <Qt3DRender/QGeometry>
 #include <Qt3DRender/QGeometryRenderer>
 #include <Qt3DRender/QMaterial>
+#include <Qt3DExtras/QFirstPersonCameraController>
 
 #include <QtGui/QScreen>
 
@@ -56,16 +59,19 @@ int main(int argc, char *argv[])
 
     // Camera
     Qt3DRender::QCamera *camera = view->camera();
-    camera->lens()->setPerspectiveProjection(45.0f, 16.0f/9.0f, 0.1f, 1000.0f);
-    QVector3D originalPosition(0, 0, 50.0f);
+    camera->lens()->setPerspectiveProjection(45.0f, 16.0f/9.0f, 0.1f, 100.0f);
+    QVector3D originalPosition(0, 10.0f, 20.0f);
     camera->setPosition(originalPosition);
     QVector3D originalViewCenter(0, 0, 0);
     camera->setViewCenter(originalViewCenter);
+    QVector3D upVector(0, 1.0, 0);
+    camera->setUpVector(upVector);
 
     // Camera control
-    Qt3DExtras::QOrbitCameraController *camController = new Qt3DExtras::QOrbitCameraController(rootEntity);
-    camController->setLookSpeed(180.0f);
-    camController->setLinearSpeed(50.0f);
+//    Qt3DExtras::QOrbitCameraController *camController = new Qt3DExtras::QOrbitCameraController(rootEntity);
+    Qt3DExtras::QFirstPersonCameraController *camController = new Qt3DExtras::QFirstPersonCameraController(rootEntity);
+//    camController->setLookSpeed(180.0f);
+//    camController->setLinearSpeed(50.0f);
     camController->setCamera(camera);
 
     // Cuboid mesh data
@@ -81,9 +87,9 @@ int main(int argc, char *argv[])
 
     // Cuboid material
     Qt3DExtras::QPhongAlphaMaterial *cuboidMaterial = new Qt3DExtras::QPhongAlphaMaterial(rootEntity);
-    cuboidMaterial->setDiffuse(QColor(0, 0, 255, 255));
-    cuboidMaterial->setAmbient(QColor(0, 0, 255, 255));
-    cuboidMaterial->setSpecular(QColor(0, 0, 255, 255));
+    cuboidMaterial->setDiffuse(QColor(255, 0, 0, 255));
+    cuboidMaterial->setAmbient(QColor(255, 0, 0, 255));
+    cuboidMaterial->setSpecular(QColor(255, 0, 0, 255));
     cuboidMaterial->setAlpha(0.5);
     cuboidMaterial->setShininess(1.0);
 
@@ -93,6 +99,19 @@ int main(int argc, char *argv[])
     cuboidEntity->addComponent(cuboidTransform);
     cuboidEntity->addComponent(cuboidMaterial);
     cuboidEntity->setEnabled(true);
+
+    // Plane mesh
+    Qt3DExtras::QPlaneMesh *planeMesh = new Qt3DExtras::QPlaneMesh();
+    planeMesh->setWidth(20);
+    planeMesh->setHeight(20);
+
+    Qt3DExtras::QPhongAlphaMaterial *planeMaterial = new Qt3DExtras::QPhongAlphaMaterial(rootEntity);
+    planeMaterial->setAmbient(QColor(0, 0, 180, 255));
+
+    Qt3DCore::QEntity *planeEntity = new Qt3DCore::QEntity(rootEntity);
+    planeEntity->addComponent(planeMesh);
+    planeEntity->addComponent(planeMaterial);
+    planeEntity->setEnabled(true);
 
     // Billboard
     // Points
