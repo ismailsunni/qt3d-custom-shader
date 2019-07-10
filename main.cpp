@@ -103,14 +103,14 @@ int main(int argc, char *argv[])
     pos << QVector3D(0, 0, 4);
 
     // Billboard Geometry
-    BillboardGeometry *bbg = new BillboardGeometry();
-    bbg->setPoints(pos);
+    BillboardGeometry *billboardGeometry = new BillboardGeometry();
+    billboardGeometry->setPoints(pos);
 
     // Billboard Geometry Renderer
     Qt3DRender::QGeometryRenderer *billboardGeometryRenderer = new Qt3DRender::QGeometryRenderer;
     billboardGeometryRenderer->setPrimitiveType( Qt3DRender::QGeometryRenderer::Points );
-    billboardGeometryRenderer->setGeometry( bbg );
-    billboardGeometryRenderer->setVertexCount( bbg->count() );
+    billboardGeometryRenderer->setGeometry( billboardGeometry );
+    billboardGeometryRenderer->setVertexCount( billboardGeometry->count() );
 
     // Billboard Material
     BillboardMaterial *billboardMaterial = new BillboardMaterial();

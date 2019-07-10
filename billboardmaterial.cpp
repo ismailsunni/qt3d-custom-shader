@@ -14,11 +14,9 @@
 BillboardMaterial::BillboardMaterial()
     : mSize( new Qt3DRender::QParameter( "BB_SIZE", QSize(100, 100), this ) )
     , mWindowSize( new Qt3DRender::QParameter( "WIN_SCALE", QSize(800, 600), this ) )
-    , mTxt( new Qt3DRender::QParameter( "tex0", "txt", this ) )
 {
     addParameter( mSize );
     addParameter( mWindowSize );
-    addParameter( mTxt );
 
     // Shader program
     Qt3DRender::QShaderProgram *shaderProgram = new Qt3DRender::QShaderProgram( this );
@@ -30,9 +28,15 @@ BillboardMaterial::BillboardMaterial()
     Qt3DRender::QRenderPass *renderPass = new Qt3DRender::QRenderPass( this );
     renderPass->setShaderProgram(shaderProgram);
 
+    // without this filter the default forward renderer would not render this
+    Qt3DRender::QFilterKey *filterKey = new Qt3DRender::QFilterKey;
+    filterKey->setName( QStringLiteral( "renderingStyle" ) );
+    filterKey->setValue( "forward" );
+
     // Technique
     Qt3DRender::QTechnique *technique = new Qt3DRender::QTechnique;
     technique->addRenderPass(renderPass);
+    technique->addFilterKey(filterKey);
     technique->graphicsApiFilter()->setApi( Qt3DRender::QGraphicsApiFilter::OpenGL );
     technique->graphicsApiFilter()->setProfile( Qt3DRender::QGraphicsApiFilter::CoreProfile );
     technique->graphicsApiFilter()->setMajorVersion( 3 );
@@ -44,7 +48,7 @@ BillboardMaterial::BillboardMaterial()
 
     // Texture Image
     Qt3DRender::QTextureImage *image = new Qt3DRender::QTextureImage;
-    image->setSource( QString( "qrc:/shaders/success-kid.png" ) );
+    image->setSource(QUrl( QStringLiteral( "qrc:/shaders/success-kid.png" ) ));
 
     // Texture2D
     Qt3DRender::QTexture2D *texture2D = new Qt3DRender::QTexture2D;
@@ -54,6 +58,9 @@ BillboardMaterial::BillboardMaterial()
 
     texture2D->addTextureImage(image);
 
-    setTexture(texture2D);
+    mTxt = new Qt3DRender::QParameter( "tex0", texture2D, this );
+
+    addParameter(mTxt);
+
     setEffect( effect );
 }

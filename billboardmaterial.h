@@ -7,7 +7,7 @@
 #include <Qt3DExtras/QTextureMaterial>
 
 
-class BillboardMaterial : public Qt3DExtras::QTextureMaterial
+class BillboardMaterial : public Qt3DRender::QMaterial
 {
 
     Q_OBJECT
