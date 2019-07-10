@@ -15,6 +15,7 @@
 #include <Qt3DExtras/QOrbitCameraController>
 #include <Qt3DExtras/QPhongAlphaMaterial>
 #include <Qt3DExtras/QPlaneMesh>
+#include <Qt3DExtras/QSphereMesh>
 
 #include <Qt3DExtras/Qt3DWindow>
 #include <Qt3DExtras/qorbitcameracontroller.h>
@@ -68,10 +69,7 @@ int main(int argc, char *argv[])
     camera->setUpVector(upVector);
 
     // Camera control
-//    Qt3DExtras::QOrbitCameraController *camController = new Qt3DExtras::QOrbitCameraController(rootEntity);
     Qt3DExtras::QFirstPersonCameraController *camController = new Qt3DExtras::QFirstPersonCameraController(rootEntity);
-//    camController->setLookSpeed(180.0f);
-//    camController->setLinearSpeed(50.0f);
     camController->setCamera(camera);
 
     // Cuboid mesh data
@@ -100,18 +98,32 @@ int main(int argc, char *argv[])
     cuboidEntity->addComponent(cuboidMaterial);
     cuboidEntity->setEnabled(true);
 
-    // Plane mesh
+    // Blue Plane mesh
     Qt3DExtras::QPlaneMesh *planeMesh = new Qt3DExtras::QPlaneMesh();
     planeMesh->setWidth(20);
     planeMesh->setHeight(20);
 
     Qt3DExtras::QPhongAlphaMaterial *planeMaterial = new Qt3DExtras::QPhongAlphaMaterial(rootEntity);
-    planeMaterial->setAmbient(QColor(0, 0, 180, 255));
+    planeMaterial->setAmbient(QColor(0, 0, 255, 255));
 
     Qt3DCore::QEntity *planeEntity = new Qt3DCore::QEntity(rootEntity);
     planeEntity->addComponent(planeMesh);
     planeEntity->addComponent(planeMaterial);
     planeEntity->setEnabled(true);
+
+    // Green Sphere
+    Qt3DExtras::QSphereMesh *sphereMesh = new  Qt3DExtras::QSphereMesh();
+    Qt3DExtras::QPhongAlphaMaterial *greenMaterial = new Qt3DExtras::QPhongAlphaMaterial(rootEntity);
+    greenMaterial->setAmbient(QColor(0, 255, 0, 255));
+    Qt3DCore::QTransform *sphereTransform = new Qt3DCore::QTransform();
+    sphereTransform->setTranslation(QVector3D(0.0f, 5.0f, 0.0f));
+
+    Qt3DCore::QEntity *sphereEntity = new Qt3DCore::QEntity(rootEntity);
+    sphereEntity->addComponent(sphereMesh);
+    sphereEntity->addComponent(greenMaterial);
+    sphereEntity->addComponent(sphereTransform);
+    sphereEntity->setEnabled(true);
+
 
     // Billboard
     // Points
