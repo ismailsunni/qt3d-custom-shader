@@ -32,6 +32,8 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include <QCommandLinkButton>
+#include <QPushButton>
 
 int main(int argc, char *argv[])
 {
@@ -50,11 +52,40 @@ int main(int argc, char *argv[])
     container->setMaximumSize(screenSize);
 
     QWidget *widget = new QWidget;
+    QWidget *controlWidget = new QWidget;
     QHBoxLayout *hLayout = new QHBoxLayout(widget);
     QVBoxLayout *vLayout = new QVBoxLayout;
+    QGridLayout *controlLayout = new QGridLayout(controlWidget);
     vLayout->setAlignment(Qt::AlignTop);
     hLayout->addWidget(container, 1);
     hLayout->addLayout(vLayout);
+    vLayout->addWidget(controlWidget);
+
+    // Create control widget
+    QCommandLinkButton *info = new QCommandLinkButton();
+    info->setText(QStringLiteral("Qt3D Billboard"));
+    info->setIconSize(QSize(0,0));
+
+    // Random size
+    QPushButton *randomSizeButton = new QPushButton(controlWidget);
+    randomSizeButton->setText(QStringLiteral("Random Size"));
+    randomSizeButton->setToolTip(QStringLiteral("Random Size"));
+
+    // Bigger billboard size
+    QPushButton *biggerSizeButton = new QPushButton(controlWidget);
+    biggerSizeButton->setText(QStringLiteral("Make Bigger"));
+    biggerSizeButton->setToolTip(QStringLiteral("Make the size of billboard bigger"));
+
+    // Smaller billboard size
+    QPushButton *smallerSizeButton = new QPushButton(controlWidget);
+    smallerSizeButton->setText(QStringLiteral("Make Smaller"));
+    smallerSizeButton->setToolTip(QStringLiteral("Make the size of billboard smaller"));
+
+    // Put to layout
+    controlLayout->addWidget(info);
+    controlLayout->addWidget(randomSizeButton);
+    controlLayout->addWidget(biggerSizeButton);
+    controlLayout->addWidget(smallerSizeButton);
 
     widget->setWindowTitle(QStringLiteral("Custom Shader for Billboard"));
 
@@ -145,7 +176,7 @@ int main(int argc, char *argv[])
 
     // Billboard Material
     BillboardMaterial *billboardMaterial = new BillboardMaterial();
-    billboardMaterial->setSize(QSizeF(200, 200));
+    billboardMaterial->setSize(QSizeF(100, 100));
 
     // Billboard Transform
     Qt3DCore::QTransform *billboardTransform = new Qt3DCore::QTransform();
@@ -157,6 +188,23 @@ int main(int argc, char *argv[])
     billboardEntity->addComponent(billboardGeometryRenderer);
     billboardEntity->addComponent(billboardTransform);
     billboardEntity->setEnabled(true);
+
+
+    // Signal and slot for widgets
+    QObject::connect(randomSizeButton, &QPushButton::clicked, rootEntity, [ = ]{
+        int randomNumber = (qrand() % (20)) * 10 + 10; // Random number multiple of 10 between 0 to 200, mull
+        billboardMaterial->setSize(QSizeF(randomNumber, randomNumber));
+
+    });
+
+    QObject::connect(biggerSizeButton, &QPushButton::clicked, rootEntity, [ = ]{
+        billboardMaterial->setSize(billboardMaterial->size() + QSizeF(10, 10));
+    });
+
+    QObject::connect(smallerSizeButton, &QPushButton::clicked, rootEntity, [ = ]{
+        // Minus size --> reverse the orientation of the image
+        billboardMaterial->setSize(billboardMaterial->size() - QSizeF(10, 10));
+    });
 
     view->setRootEntity(rootEntity);
 
