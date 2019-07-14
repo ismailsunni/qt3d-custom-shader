@@ -30,9 +30,9 @@ BillboardMaterial::BillboardMaterial()
 
     texture2D->addTextureImage(image);
 
-    mTxt = new Qt3DRender::QParameter( "tex0", texture2D, this );
+    mImageURL = new Qt3DRender::QParameter( "tex0", texture2D, this );
 
-    addParameter(mTxt);
+    addParameter(mImageURL);
 
     // Shader program
     Qt3DRender::QShaderProgram *shaderProgram = new Qt3DRender::QShaderProgram( this );
@@ -63,4 +63,24 @@ BillboardMaterial::BillboardMaterial()
     effect->addTechnique(technique);
 
     setEffect( effect );
+}
+
+void BillboardMaterial::setSize(const QSizeF size)
+{
+    mSize->setValue(size);
+}
+
+QSizeF BillboardMaterial::size() const
+{
+    return mSize->value().value<QSizeF>();
+}
+
+void BillboardMaterial::setWindowSize(const QSizeF size)
+{
+    mWindowSize->setValue(size);
+}
+
+QSizeF BillboardMaterial::windowSize() const
+{
+    return mWindowSize->value().value<QSizeF>();
 }

@@ -145,6 +145,7 @@ int main(int argc, char *argv[])
 
     // Billboard Material
     BillboardMaterial *billboardMaterial = new BillboardMaterial();
+    billboardMaterial->setSize(QSizeF(200, 200));
 
     // Billboard Transform
     Qt3DCore::QTransform *billboardTransform = new Qt3DCore::QTransform();
