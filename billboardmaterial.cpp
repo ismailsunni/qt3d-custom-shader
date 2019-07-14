@@ -8,6 +8,7 @@
 #include <Qt3DRender/QTextureImage>
 #include <QUrl>
 #include <QSizeF>
+#include <QVariant>
 
 #include "billboardmaterial.h"
 
@@ -18,9 +19,8 @@ BillboardMaterial::BillboardMaterial()
     addParameter( mSize );
     addParameter( mWindowSize );
 
-    // Texture Image
     Qt3DRender::QTextureImage *image = new Qt3DRender::QTextureImage;
-    image->setSource(QUrl( QStringLiteral( "qrc:/shaders/success-kid.png" ) ));
+    image->setSource(QUrl( QStringLiteral( "qrc:/shaders/success-kid.png") ));
 
     // Texture2D
     Qt3DRender::QTexture2D *texture2D = new Qt3DRender::QTexture2D;
@@ -30,9 +30,9 @@ BillboardMaterial::BillboardMaterial()
 
     texture2D->addTextureImage(image);
 
-    mImageURL = new Qt3DRender::QParameter( "tex0", texture2D, this );
+    mTexture2D = new Qt3DRender::QParameter( "tex0", texture2D, this );
 
-    addParameter(mImageURL);
+    addParameter(mTexture2D);
 
     // Shader program
     Qt3DRender::QShaderProgram *shaderProgram = new Qt3DRender::QShaderProgram( this );
@@ -83,4 +83,21 @@ void BillboardMaterial::setWindowSize(const QSizeF size)
 QSizeF BillboardMaterial::windowSize() const
 {
     return mWindowSize->value().value<QSizeF>();
+}
+
+void BillboardMaterial::setTexture2DFromImagePath(QString imagePath)
+{
+    // Texture Image
+    Qt3DRender::QTextureImage *image = new Qt3DRender::QTextureImage;
+    image->setSource(QUrl( imagePath ));
+
+    // Texture2D
+    Qt3DRender::QTexture2D *texture2D = new Qt3DRender::QTexture2D;
+    texture2D->setGenerateMipMaps(false);
+    texture2D->setMagnificationFilter(Qt3DRender::QTexture2D::Linear);
+    texture2D->setMinificationFilter(Qt3DRender::QTexture2D::Linear);
+
+    texture2D->addTextureImage(image);
+
+    mTexture2D->setValue(QVariant::fromValue(texture2D));
 }

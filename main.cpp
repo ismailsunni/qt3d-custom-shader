@@ -81,11 +81,22 @@ int main(int argc, char *argv[])
     smallerSizeButton->setText(QStringLiteral("Make Smaller"));
     smallerSizeButton->setToolTip(QStringLiteral("Make the size of billboard smaller"));
 
+    // Switch image
+    QPushButton *successKidButton = new QPushButton(controlWidget);
+    successKidButton->setText(QStringLiteral("Success Kid"));
+    successKidButton->setToolTip(QStringLiteral("Swith the image of the billboards to success kid"));
+
+    QPushButton *qgisIDButton = new QPushButton(controlWidget);
+    qgisIDButton->setText(QStringLiteral("QGIS ID"));
+    qgisIDButton->setToolTip(QStringLiteral("Swith the image of the billboards to QGIS ID logo"));
+
     // Put to layout
     controlLayout->addWidget(info);
     controlLayout->addWidget(randomSizeButton);
     controlLayout->addWidget(biggerSizeButton);
     controlLayout->addWidget(smallerSizeButton);
+    controlLayout->addWidget(successKidButton);
+    controlLayout->addWidget(qgisIDButton);
 
     widget->setWindowTitle(QStringLiteral("Custom Shader for Billboard"));
 
@@ -176,7 +187,6 @@ int main(int argc, char *argv[])
 
     // Billboard Material
     BillboardMaterial *billboardMaterial = new BillboardMaterial();
-    billboardMaterial->setSize(QSizeF(100, 100));
 
     // Billboard Transform
     Qt3DCore::QTransform *billboardTransform = new Qt3DCore::QTransform();
@@ -204,6 +214,14 @@ int main(int argc, char *argv[])
     QObject::connect(smallerSizeButton, &QPushButton::clicked, rootEntity, [ = ]{
         // Minus size --> reverse the orientation of the image
         billboardMaterial->setSize(billboardMaterial->size() - QSizeF(10, 10));
+    });
+
+    QObject::connect(successKidButton, &QPushButton::clicked, rootEntity, [ = ]{
+        billboardMaterial->setTexture2DFromImagePath(QStringLiteral( "qrc:/shaders/success-kid.png"));
+    });
+
+    QObject::connect(qgisIDButton, &QPushButton::clicked, rootEntity, [ = ]{
+        billboardMaterial->setTexture2DFromImagePath(QStringLiteral( "qrc:/shaders/QGIS-ID.png"));
     });
 
     view->setRootEntity(rootEntity);

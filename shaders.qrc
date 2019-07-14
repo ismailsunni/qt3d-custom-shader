@@ -4,5 +4,7 @@
         <file>billboards.geom</file>
         <file>billboards.vert</file>
         <file>success-kid.png</file>
+        <file>QGIS-ID.png</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

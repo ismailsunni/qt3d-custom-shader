@@ -20,10 +20,12 @@ public:
     void setWindowSize(const QSizeF size);
     QSizeF windowSize() const;
 
+    void setTexture2DFromImagePath(QString imagePath);
+
 private:
   Qt3DRender::QParameter *mSize = nullptr;
   Qt3DRender::QParameter *mWindowSize = nullptr;
-  Qt3DRender::QParameter *mImageURL = nullptr;
+  Qt3DRender::QParameter *mTexture2D = nullptr;
 };
 
 #endif // BILLBOARDMATERIAL_H
