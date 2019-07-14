@@ -7,13 +7,13 @@
 #include <Qt3DRender/QTexture>
 #include <Qt3DRender/QTextureImage>
 #include <QUrl>
-#include <QSize>
+#include <QSizeF>
 
 #include "billboardmaterial.h"
 
 BillboardMaterial::BillboardMaterial()
-    : mSize( new Qt3DRender::QParameter( "BB_SIZE", QSize(100, 100), this ) )
-    , mWindowSize( new Qt3DRender::QParameter( "WIN_SCALE", QSize(800, 600), this ) )
+    : mSize( new Qt3DRender::QParameter( "BB_SIZE", QSizeF(100, 100), this ) )
+    , mWindowSize( new Qt3DRender::QParameter( "WIN_SCALE", QSizeF(800, 600), this ) )
 {
     addParameter( mSize );
     addParameter( mWindowSize );
