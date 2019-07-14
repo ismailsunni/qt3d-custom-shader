@@ -85,6 +85,17 @@ QSizeF BillboardMaterial::windowSize() const
     return mWindowSize->value().value<QSizeF>();
 }
 
+void BillboardMaterial::setTexture2D(Qt3DRender::QTexture2D *texture2D)
+{
+    mTexture2D->setValue(QVariant::fromValue(texture2D));
+}
+
+Qt3DRender::QTexture2D* BillboardMaterial::texture2D()
+{
+    QVariant variant = mTexture2D->value();
+    return qvariant_cast<Qt3DRender::QTexture2D*>(variant);
+}
+
 void BillboardMaterial::setTexture2DFromImagePath(QString imagePath)
 {
     // Texture Image
@@ -99,5 +110,5 @@ void BillboardMaterial::setTexture2DFromImagePath(QString imagePath)
 
     texture2D->addTextureImage(image);
 
-    mTexture2D->setValue(QVariant::fromValue(texture2D));
+    setTexture2D(texture2D);
 }
